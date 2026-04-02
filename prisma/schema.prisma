@@ -20,6 +20,8 @@ model User {
   role         Role     @default(USER)
   refreshToken String?
   createdAt    DateTime @default(now())
+
+  @@map("users")
 }
 
 model Category {
@@ -27,14 +29,20 @@ model Category {
   title     String
   image     String?
   deletedAt DateTime?
+
   products  Product[]
+
+  @@map("categories")
 }
 
 model Variation {
   id        String   @id @default(uuid())
   title     String
   deletedAt DateTime?
+
   products  ProductVariation[]
+
+  @@map("variations")
 }
 
 model Product {
@@ -42,10 +50,14 @@ model Product {
   title       String
   categoryId  String
   category    Category @relation(fields: [categoryId], references: [id])
+
   images      ProductImage[]
   variations  ProductVariation[]
+
   deletedAt   DateTime?
   createdAt   DateTime @default(now())
+
+  @@map("products")
 }
 
 model ProductImage {
@@ -53,12 +65,17 @@ model ProductImage {
   url       String
   productId String
   product   Product @relation(fields: [productId], references: [id])
+
+  @@map("product_images")
 }
 
 model ProductVariation {
   id           String    @id @default(uuid())
   productId    String
   variationId  String
+
   product      Product   @relation(fields: [productId], references: [id])
   variation    Variation @relation(fields: [variationId], references: [id])
+
+  @@map("product_variations")
 }
