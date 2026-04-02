@@ -1,22 +1,64 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
-   url      = env("DATABASE_URL")
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  USER
 }
 
 model User {
   id           String   @id @default(uuid())
+  name         String
   email        String   @unique
   password     String
+  role         Role     @default(USER)
   refreshToken String?
   createdAt    DateTime @default(now())
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  title     String
+  image     String?
+  deletedAt DateTime?
+  products  Product[]
+}
+
+model Variation {
+  id        String   @id @default(uuid())
+  title     String
+  deletedAt DateTime?
+  products  ProductVariation[]
+}
+
+model Product {
+  id          String   @id @default(uuid())
+  title       String
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  images      ProductImage[]
+  variations  ProductVariation[]
+  deletedAt   DateTime?
+  createdAt   DateTime @default(now())
+}
+
+model ProductImage {
+  id        String  @id @default(uuid())
+  url       String
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+model ProductVariation {
+  id           String    @id @default(uuid())
+  productId    String
+  variationId  String
+  product      Product   @relation(fields: [productId], references: [id])
+  variation    Variation @relation(fields: [variationId], references: [id])
 }

@@ -1,34 +1,20 @@
 import { Module } from '@nestjs/common';
+import { PrismaModule } from '../prisma/prisma.module';
+
+import { AuthModule } from './modules/auth/auth.module';
+import { UsersModule } from './modules/users/users.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { VariationsModule } from './modules/variations/variations.module';
+import { ProductsModule } from './modules/products/products.module';
 
 @Module({
-  providers: [
-    PrismaService,
-    JwtServiceCustom,
-    JwtStrategy,
-
-    {
-      provide: "UserRepository",
-      useClass: UserPrismaRepository,
-    },
-
-    {
-      provide: CreateUserUseCase,
-      useFactory: (repo) => new CreateUserUseCase(repo),
-      inject: ["UserRepository"],
-    },
-
-    {
-      provide: LoginUseCase,
-      useFactory: (repo, jwt) => new LoginUseCase(repo, jwt),
-      inject: ["UserRepository", JwtServiceCustom],
-    },
-
-    {
-      provide: RefreshTokenUseCase,
-      useFactory: (repo, jwt) => new RefreshTokenUseCase(repo, jwt),
-      inject: ["UserRepository", JwtServiceCustom],
-    },
+  imports: [
+    PrismaModule,
+    AuthModule,
+    UsersModule,
+    CategoriesModule,
+    VariationsModule,
+    ProductsModule,
   ],
-  controllers: [AuthController],
 })
 export class AppModule {}
