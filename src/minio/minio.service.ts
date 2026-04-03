@@ -1,0 +1,62 @@
+import { Injectable, OnModuleInit } from '@nestjs/common';
+import * as Minio from 'minio';
+import { randomUUID } from 'crypto';
+import { UploadedFile as UploadedFileType } from '../common/types/uploaded-file.type';
+@Injectable()
+export class MinioService implements OnModuleInit {
+  private client: Minio.Client;
+  private readonly bucket = 'podemaismidia';
+  async onModuleInit() {
+    const { MINIO_ENDPOINT, MINIO_PORT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY } =
+      process.env;
+
+    if (
+      !MINIO_ENDPOINT ||
+      !MINIO_PORT ||
+      !MINIO_ACCESS_KEY ||
+      !MINIO_SECRET_KEY
+    ) {
+      throw new Error('MinIO env vars not defined');
+    }
+
+    this.client = new Minio.Client({
+      endPoint: MINIO_ENDPOINT,
+      port: Number(MINIO_PORT),
+      useSSL: true,
+      accessKey: MINIO_ACCESS_KEY,
+      secretKey: MINIO_SECRET_KEY,
+    });
+
+    await this.ensureBucket();
+  }
+
+  private async ensureBucket() {
+    const exists = await this.client.bucketExists(this.bucket);
+
+    if (!exists) {
+      await this.client.makeBucket(this.bucket, 'us-east-1');
+    }
+  }
+
+  async uploadFile(file: UploadedFileType, folder = '') {
+    if (!file) {
+      throw new Error('Arquivo não enviado');
+    }
+
+    const fileExt = file.originalname.split('.').pop();
+    const fileName = `${folder}/${randomUUID()}.${fileExt}`;
+
+    await this.client.putObject(this.bucket, fileName, file.buffer, file.size, {
+      'Content-Type': file.mimetype,
+    });
+
+    return {
+      fileName,
+    };
+  }
+  async deleteFile(fileName: string) {
+    if (!fileName) return;
+
+    await this.client.removeObject(this.bucket, fileName);
+  }
+}

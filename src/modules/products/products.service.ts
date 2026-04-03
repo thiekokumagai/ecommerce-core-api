@@ -10,9 +10,9 @@ export class ProductsService {
       data: {
         title: dto.title,
         categoryId: dto.categoryId,
-        images: { create: dto.images.map(url => ({ url })) },
+        images: { create: dto.images.map((url) => ({ url })) },
         variations: {
-          create: dto.variationIds.map(id => ({ variationId: id })),
+          create: dto.variationIds.map((id) => ({ variationId: id })),
         },
       },
     });

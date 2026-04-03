@@ -15,7 +15,6 @@ async function bootstrap() {
   );
   app.setGlobalPrefix('api');
 
-  
   const config = new DocumentBuilder()
     .setTitle('Admin API')
     .setDescription('API Ecommerce')
@@ -28,7 +27,7 @@ async function bootstrap() {
         description: 'Digite o token JWT',
         in: 'header',
       },
-      'access-token', 
+      'access-token',
     )
     .build();
 

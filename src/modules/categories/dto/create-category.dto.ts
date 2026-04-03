@@ -7,8 +7,11 @@ export class CreateCategoryDto {
   @IsNotEmpty()
   title: string;
 
-
-  @ApiProperty({ example: 'https://minio.vendizap.com/vendizap-categorias/550a0eb3812c3e44071a03ea13cb0170.jpg' })
+  @ApiProperty({
+    example: 'https://.../image.jpg',
+    required: false,
+  })
+  @IsOptional()
   @IsString()
-  image: string;
+  image?: string;
 }
