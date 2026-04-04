@@ -43,7 +43,14 @@ export class MinioService implements OnModuleInit {
       throw new Error('Arquivo não enviado');
     }
 
-    const fileExt = file.originalname.split('.').pop();
+    const mimeToExt: Record<string, string> = {
+      'image/jpeg': 'jpg',
+      'image/png': 'png',
+      'image/webp': 'webp',
+    };
+
+    const fileExt = mimeToExt[file.mimetype] || 'jpg';
+
     const fileName = `${folder}/${randomUUID()}.${fileExt}`;
 
     await this.client.putObject(this.bucket, fileName, file.buffer, file.size, {

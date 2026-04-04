@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
-
+import sharp from 'sharp';
 import {
   ApiTags,
   ApiOperation,
@@ -53,7 +53,6 @@ export class CategoriesController {
     return this.service.findAll();
   }
 
-  // 📌 CREATE
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(FileInterceptor('file'))
@@ -76,11 +75,23 @@ export class CategoriesController {
     @UploadedFile() file: Express.Multer.File,
     @Body() body: CreateCategoryDto,
   ) {
+    const croppedBuffer = await sharp(file.buffer)
+      .resize(92, 92, {
+        fit: 'cover',
+        position: 'center',
+      })
+      .webp({ quality: 90 })
+      .toBuffer();
     let image: string | null = null;
 
     if (file) {
       const upload = await this.minioService.uploadFile(
-        file as UploadedFileType,
+        {
+          ...file,
+          originalname: 'file.webp',
+          buffer: croppedBuffer,
+          mimetype: 'image/webp',
+        } as UploadedFileType,
         'categories',
       );
       image = upload.fileName;
@@ -114,11 +125,26 @@ export class CategoriesController {
 
     if (file) {
       const current = await this.service.findById(id);
+
       if (current?.image) {
         await this.minioService.deleteFile(current.image);
       }
+
+      const croppedBuffer = await sharp(file.buffer)
+        .resize(92, 92, {
+          fit: 'cover',
+          position: 'center',
+        })
+        .webp({ quality: 90 })
+        .toBuffer();
+
       const upload = await this.minioService.uploadFile(
-        file as UploadedFileType,
+        {
+          ...file,
+          originalname: 'file.webp',
+          buffer: croppedBuffer,
+          mimetype: 'image/webp',
+        } as UploadedFileType,
         'categories',
       );
 
