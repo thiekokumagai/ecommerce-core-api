@@ -29,6 +29,7 @@ model Category {
   title     String
   image     String?
   isVisible Boolean  @default(true)
+  order     Int      @default(0)
   deletedAt DateTime?
 
   products  Product[]

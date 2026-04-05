@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsBoolean } from 'class-validator';
+import { IsString, IsOptional, IsBoolean, IsArray } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -33,4 +33,18 @@ export class UpdateCategoryDto {
   })
   @IsBoolean()
   removeImage?: boolean;
+}
+
+export class UpdateOrderDto {
+  @ApiProperty({
+    example: [
+      { id: 'uuid', order: 1 },
+      { id: 'uuid', order: 2 },
+    ],
+  })
+  @IsArray()
+  items: {
+    id: string;
+    order: number;
+  }[];
 }

@@ -29,7 +29,7 @@ import { CategoriesService } from './categories.service';
 import { MinioService } from '../../minio/minio.service';
 
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
+import { UpdateCategoryDto, UpdateOrderDto } from './dto/update-category.dto';
 import { CategoryResponseDto } from './dto/category-response.dto';
 import { UploadedFile as UploadedFileType } from '../../common/types/uploaded-file.type';
 
@@ -161,6 +161,13 @@ export class CategoriesController {
       ...(body.isVisible !== undefined && { isVisible: body.isVisible }),
       ...(image !== undefined && { image }),
     });
+  }
+
+  @Patch('batch/order')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Reordenar categorias' })
+  async updateBatchOrder(@Body() body: UpdateOrderDto) {
+    return this.service.updateBatchOrder(body.items);
   }
 
   @Delete(':id')
