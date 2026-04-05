@@ -32,6 +32,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CategoryResponseDto } from './dto/category-response.dto';
 import { UploadedFile as UploadedFileType } from '../../common/types/uploaded-file.type';
+
 @ApiTags('Categories')
 @ApiBearerAuth('access-token')
 @UseGuards(JwtAuthGuard)
@@ -120,11 +121,16 @@ export class CategoriesController {
     @UploadedFile() file: Express.Multer.File,
     @Body() body: UpdateCategoryDto,
   ) {
-    let image: string | undefined;
+    let image: string | null | undefined;
+    const current = await this.service.findById(id);
+    if (body.removeImage) {
+      if (current?.image) {
+        await this.minioService.deleteFile(current.image);
+      }
+      image = null;
+    }
 
     if (file) {
-      const current = await this.service.findById(id);
-
       if (current?.image) {
         await this.minioService.deleteFile(current.image);
       }
@@ -151,8 +157,9 @@ export class CategoriesController {
     }
 
     return this.service.update(id, {
-      ...body,
-      ...(image && { image }),
+      ...(body.title !== undefined && { title: body.title }),
+      ...(body.isVisible !== undefined && { isVisible: body.isVisible }),
+      ...(image !== undefined && { image }),
     });
   }
 

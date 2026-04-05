@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { Prisma } from '@prisma/client';
 @Injectable()
 export class CategoriesService {
   constructor(private prisma: PrismaService) {}
@@ -25,10 +24,17 @@ export class CategoriesService {
     });
   }
 
-  update(id: string, data: Prisma.CategoryUpdateInput) {
+  update(
+    id: string,
+    data: { title?: string; image?: string | null; isVisible?: boolean },
+  ) {
     return this.prisma.category.update({
       where: { id },
-      data,
+      data: {
+        title: data.title,
+        image: data.image,
+        isVisible: data.isVisible,
+      },
     });
   }
 

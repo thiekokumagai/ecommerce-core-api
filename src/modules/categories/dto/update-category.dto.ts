@@ -20,4 +20,17 @@ export class UpdateCategoryDto {
   })
   @IsBoolean()
   isVisible?: boolean;
+
+  @ApiProperty({
+    example: true,
+    required: false,
+  })
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (value === 'true' || value === true) return true;
+    if (value === 'false' || value === false) return false;
+    return false;
+  })
+  @IsBoolean()
+  removeImage?: boolean;
 }
