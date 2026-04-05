@@ -15,9 +15,13 @@ export class CategoriesService {
     });
   }
 
-  create(data: { title: string; image?: string | null }) {
+  create(data: { title: string; image?: string | null; isVisible?: boolean }) {
     return this.prisma.category.create({
-      data,
+      data: {
+        title: data.title,
+        image: data.image,
+        isVisible: data.isVisible,
+      },
     });
   }
 

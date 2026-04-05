@@ -42,7 +42,6 @@ export class CategoriesController {
     private minioService: MinioService,
   ) {}
 
-  // 📌 LISTAR
   @Get()
   @ApiOperation({ summary: 'Listar categorias' })
   @ApiResponse({
@@ -75,16 +74,16 @@ export class CategoriesController {
     @UploadedFile() file: Express.Multer.File,
     @Body() body: CreateCategoryDto,
   ) {
-    const croppedBuffer = await sharp(file.buffer)
-      .resize(92, 92, {
-        fit: 'cover',
-        position: 'center',
-      })
-      .webp({ quality: 90 })
-      .toBuffer();
     let image: string | null = null;
 
     if (file) {
+      const croppedBuffer = await sharp(file.buffer)
+        .resize(92, 92, {
+          fit: 'cover',
+          position: 'center',
+        })
+        .webp({ quality: 90 })
+        .toBuffer();
       const upload = await this.minioService.uploadFile(
         {
           ...file,
@@ -96,10 +95,10 @@ export class CategoriesController {
       );
       image = upload.fileName;
     }
-
     return this.service.create({
       title: body.title,
       image,
+      isVisible: body.isVisible,
     });
   }
 
@@ -162,12 +161,8 @@ export class CategoriesController {
   @ApiOperation({ summary: 'Deletar categoria' })
   async delete(@Param('id') id: string) {
     const category = await this.service.findById(id);
-
     if (category?.image) {
-      const fileName = category.image.split('/').pop();
-      if (fileName) {
-        await this.minioService.deleteFile(fileName);
-      }
+      await this.minioService.deleteFile(category.image);
     }
 
     return this.service.delete(id);

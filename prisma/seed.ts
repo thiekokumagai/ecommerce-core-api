@@ -13,7 +13,7 @@ async function main() {
       name: 'Admin',
       email: 'admin@admin.com',
       password,
-      role: 'ADMIN', // 👈 importante
+      role: 'ADMIN',
     },
   });
 

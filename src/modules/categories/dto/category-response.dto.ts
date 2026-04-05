@@ -18,4 +18,7 @@ export class CategoryResponseDto {
 
   @ApiProperty()
   updatedAt: Date;
+
+  @ApiProperty()
+  isVisible: boolean;
 }

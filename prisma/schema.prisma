@@ -28,6 +28,7 @@ model Category {
   id        String   @id @default(uuid())
   title     String
   image     String?
+  isVisible Boolean  @default(true)
   deletedAt DateTime?
 
   products  Product[]
