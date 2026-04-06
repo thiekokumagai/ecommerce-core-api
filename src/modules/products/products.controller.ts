@@ -11,7 +11,7 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('Products')
 @ApiBearerAuth('access-token')
