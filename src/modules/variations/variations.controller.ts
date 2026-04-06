@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -8,9 +17,10 @@ import {
 import { VariationsService } from './variations.service';
 import { CreateVariationDto } from './dto/create-variation.dto';
 import { UpdateVariationDto } from './dto/update-variation.dto';
-
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 @ApiTags('Variations')
 @ApiBearerAuth('access-token')
+@UseGuards(JwtAuthGuard)
 @Controller('variations')
 export class VariationsController {
   constructor(private readonly service: VariationsService) {}

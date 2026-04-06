@@ -29,10 +29,8 @@ model Category {
   title     String
   image     String?
   isVisible Boolean   @default(true)
-  order     Int       @default(0)
+  order Int       @default(0)
   deletedAt DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
 
   products Product[]
 
@@ -44,7 +42,6 @@ model Variation {
   title     String
   deletedAt DateTime?
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
 
   options  VariationOption[]
   products ProductVariation[]
@@ -58,8 +55,7 @@ model VariationOption {
   variationId String
   deletedAt   DateTime?
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-
+  order Int       @default(0)
   variation   Variation           @relation(fields: [variationId], references: [id])
   itemOptions ProductItemOption[]
 
@@ -73,7 +69,6 @@ model Product {
   categoryId String
   deletedAt  DateTime?
   createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
 
   category   Category           @relation(fields: [categoryId], references: [id])
   images     ProductImage[]

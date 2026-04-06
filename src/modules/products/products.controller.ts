@@ -6,6 +6,7 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -20,9 +21,11 @@ import { ProductResponseDto } from './dto/product-response.dto';
 import { AttachProductVariationsDto } from './dto/attach-product-variations.dto';
 import { CreateProductItemsDto } from './dto/create-product-items.dto';
 import { UpdateProductItemStockDto } from './dto/update-product-item-stock.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('Products')
 @ApiBearerAuth('access-token')
+@UseGuards(JwtAuthGuard)
 @Controller('products')
 export class ProductsController {
   constructor(private service: ProductsService) {}

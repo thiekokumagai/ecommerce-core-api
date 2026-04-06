@@ -9,14 +9,6 @@ export class CreateCategoryDto {
   title: string;
 
   @ApiProperty({
-    example: 'https://.../image.jpg',
-    required: false,
-  })
-  @IsOptional()
-  @IsString()
-  image?: string;
-
-  @ApiProperty({
     example: true,
     required: false,
   })
