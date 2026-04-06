@@ -10,7 +10,18 @@ class CategoryDto {
 
 class ImageDto {
   @ApiProperty()
+  id: string;
+
+  @ApiProperty()
   url: string;
+}
+
+class VariationOptionDto {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty()
+  value: string;
 }
 
 class VariationDto {
@@ -19,6 +30,45 @@ class VariationDto {
 
   @ApiProperty()
   title: string;
+
+  @ApiProperty({ type: [VariationOptionDto] })
+  options: VariationOptionDto[];
+}
+
+class ProductVariationDto {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty({ type: VariationDto })
+  variation: VariationDto;
+}
+
+class ProductItemSelectedOptionDto {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty({ type: VariationOptionDto })
+  option: VariationOptionDto;
+}
+
+class ProductItemDto {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty()
+  stock: number;
+
+  @ApiProperty({ required: false, nullable: true })
+  sku?: string | null;
+
+  @ApiProperty({ required: false, nullable: true, example: '49.90' })
+  price?: string | null;
+
+  @ApiProperty()
+  hash: string;
+
+  @ApiProperty({ type: [ProductItemSelectedOptionDto] })
+  options: ProductItemSelectedOptionDto[];
 }
 
 export class ProductResponseDto {
@@ -34,6 +84,9 @@ export class ProductResponseDto {
   @ApiProperty({ type: [ImageDto] })
   images: ImageDto[];
 
-  @ApiProperty({ type: [VariationDto] })
-  variations: VariationDto[];
+  @ApiProperty({ type: [ProductVariationDto] })
+  variations: ProductVariationDto[];
+
+  @ApiProperty({ type: [ProductItemDto] })
+  items: ProductItemDto[];
 }
