@@ -1,10 +1,4 @@
-import {
-  IsString,
-  IsNotEmpty,
-  IsOptional,
-  IsBoolean,
-  IsNumber,
-} from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional, IsBoolean } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -26,11 +20,4 @@ export class CreateCategoryDto {
   })
   @IsBoolean()
   isVisible?: boolean;
-
-  @ApiProperty({
-    example: 1,
-    required: false,
-  })
-  @IsNumber()
-  order: number;
 }

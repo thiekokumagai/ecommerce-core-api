@@ -211,7 +211,8 @@ export class VariationsService {
       };
     });
 
-    const grouped = merged.reduce((acc, item) => {
+    const grouped = merged.reduce(
+      (acc, item) => {
         if (!acc[item.variationId]) {
           acc[item.variationId] = [];
         }
