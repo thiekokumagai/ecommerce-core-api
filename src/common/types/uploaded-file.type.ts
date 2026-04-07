@@ -3,4 +3,5 @@ export type UploadedFile = {
   buffer: Buffer;
   size: number;
   mimetype: string;
+  customName?: string;
 };

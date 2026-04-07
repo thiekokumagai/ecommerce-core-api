@@ -51,7 +51,9 @@ export class MinioService implements OnModuleInit {
 
     const fileExt = mimeToExt[file.mimetype] || 'jpg';
 
-    const fileName = `${folder}/${randomUUID()}.${fileExt}`;
+    const fileName = file.customName
+      ? `${folder}/${file.customName}`
+      : `${folder}/${randomUUID()}.${fileExt}`;
 
     await this.client.putObject(this.bucket, fileName, file.buffer, file.size, {
       'Content-Type': file.mimetype,

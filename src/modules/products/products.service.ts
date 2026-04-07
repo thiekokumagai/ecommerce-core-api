@@ -98,6 +98,34 @@ export class ProductsService {
     return product;
   }
 
+  async addImages(productId: string, urls: string[]) {
+    await this.findOne(productId);
+
+    await this.prisma.productImage.createMany({
+      data: urls.map((url) => ({
+        url,
+        productId,
+      })),
+    });
+
+    return this.findOne(productId);
+  }
+
+  async removeImage(productId: string, imageId: string) {
+    const product = await this.findOne(productId);
+
+    const image = product.images.find((img) => img.id === imageId);
+    if (!image) {
+      throw new NotFoundException('Imagem não encontrada');
+    }
+
+    await this.prisma.productImage.delete({
+      where: { id: imageId },
+    });
+
+    return image;
+  }
+
   async attachVariations(productId: string, dto: AttachProductVariationsDto) {
     await this.findOne(productId);
 
