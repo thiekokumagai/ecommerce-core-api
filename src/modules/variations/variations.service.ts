@@ -19,12 +19,15 @@ export class VariationsService {
       data: {
         title: dto.title.trim(),
         options: {
-          create: normalizedOptions.map((value) => ({ value })),
+          create: normalizedOptions.map((value, index) => ({
+            value,
+            order: index + 1,
+          })),
         },
       },
       include: {
         options: {
-          orderBy: { value: 'asc' },
+          orderBy: { order: 'asc' },
         },
       },
     });
@@ -36,7 +39,7 @@ export class VariationsService {
       orderBy: { title: 'asc' },
       include: {
         options: {
-          orderBy: { value: 'asc' },
+          orderBy: { order: 'asc' },
         },
       },
     });
@@ -50,7 +53,7 @@ export class VariationsService {
       },
       include: {
         options: {
-          orderBy: { value: 'asc' },
+          orderBy: { order: 'asc' },
         },
       },
     });
@@ -114,13 +117,17 @@ export class VariationsService {
           });
         }
 
-        for (const value of normalizedOptions) {
+        for (let i = 0; i < normalizedOptions.length; i++) {
+          const value = normalizedOptions[i];
           const existing = existingMap.get(value.toLowerCase());
 
           if (existing) {
             await tx.variationOption.update({
               where: { id: existing.id },
-              data: { value },
+              data: {
+                value,
+                order: i + 1,
+              },
             });
             continue;
           }
@@ -129,6 +136,7 @@ export class VariationsService {
             data: {
               variationId: id,
               value,
+              order: i + 1,
             },
           });
         }
@@ -138,7 +146,7 @@ export class VariationsService {
         where: { id },
         include: {
           options: {
-            orderBy: { value: 'asc' },
+            orderBy: { order: 'asc' },
           },
         },
       });
@@ -178,5 +186,66 @@ export class VariationsService {
     }
 
     return normalized;
+  }
+  async updateBatchOrder(items: { id: string; order: number }[]) {
+    const options = await this.prisma.variationOption.findMany({
+      where: {
+        id: { in: items.map((i) => i.id) },
+      },
+      select: {
+        id: true,
+        variationId: true,
+      },
+    });
+
+    const merged = items.map((item) => {
+      const option = options.find((o) => o.id === item.id);
+
+      if (!option) {
+        throw new NotFoundException(`Item não encontrado: ${item.id}`);
+      }
+
+      return {
+        ...item,
+        variationId: option.variationId,
+      };
+    });
+
+    const grouped = merged.reduce((acc, item) => {
+        if (!acc[item.variationId]) {
+          acc[item.variationId] = [];
+        }
+        acc[item.variationId].push(item);
+        return acc;
+      },
+      {} as Record<string, typeof merged>,
+    );
+
+    return this.prisma.$transaction(async (tx) => {
+      for (const variationId in grouped) {
+        const group = grouped[variationId];
+
+        for (const item of group) {
+          await tx.variationOption.update({
+            where: { id: item.id },
+            data: { order: item.order + 1000 },
+          });
+        }
+      }
+      for (const variationId in grouped) {
+        const group = grouped[variationId];
+
+        group.sort((a, b) => a.order - b.order);
+
+        for (let i = 0; i < group.length; i++) {
+          await tx.variationOption.update({
+            where: { id: group[i].id },
+            data: { order: i + 1 },
+          });
+        }
+      }
+
+      return true;
+    });
   }
 }

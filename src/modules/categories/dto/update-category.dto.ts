@@ -1,5 +1,12 @@
-import { IsString, IsOptional, IsBoolean, IsArray } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsString,
+  IsOptional,
+  IsBoolean,
+  IsArray,
+  IsUUID,
+  IsInt,
+  ValidateNested,
+} from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateCategoryDto {
@@ -35,16 +42,23 @@ export class UpdateCategoryDto {
   removeImage?: boolean;
 }
 
+export class UpdateOrderItemDto {
+  @IsUUID()
+  id: string;
+
+  @IsInt()
+  order: number;
+}
 export class UpdateOrderDto {
   @ApiProperty({
+    type: [UpdateOrderItemDto],
     example: [
       { id: 'uuid', order: 1 },
       { id: 'uuid', order: 2 },
     ],
   })
   @IsArray()
-  items: {
-    id: string;
-    order: number;
-  }[];
+  @ValidateNested({ each: true })
+  @Type(() => UpdateOrderItemDto)
+  items: UpdateOrderItemDto[];
 }

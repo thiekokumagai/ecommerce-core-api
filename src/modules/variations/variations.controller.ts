@@ -7,6 +7,8 @@ import {
   Patch,
   Post,
   UseGuards,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -16,7 +18,7 @@ import {
 } from '@nestjs/swagger';
 import { VariationsService } from './variations.service';
 import { CreateVariationDto } from './dto/create-variation.dto';
-import { UpdateVariationDto } from './dto/update-variation.dto';
+import { UpdateVariationDto, UpdateOrderDto } from './dto/update-variation.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 @ApiTags('Variations')
 @ApiBearerAuth('access-token')
@@ -26,6 +28,7 @@ export class VariationsController {
   constructor(private readonly service: VariationsService) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Criar variação com opções' })
   @ApiResponse({ status: 201, description: 'Variação criada com sucesso' })
   create(@Body() body: CreateVariationDto) {
@@ -51,8 +54,16 @@ export class VariationsController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Deletar variação' })
   delete(@Param('id') id: string) {
     return this.service.delete(id);
+  }
+
+  @Patch('batch/order')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Reordenar variações' })
+  async updateBatchOrder(@Body() body: UpdateOrderDto) {
+    return this.service.updateBatchOrder(body.items);
   }
 }
