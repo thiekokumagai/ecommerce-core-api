@@ -84,7 +84,7 @@ model ProductImage {
   productId String
   createdAt DateTime @default(now())
 
-  product Product @relation(fields: [productId], references: [id])
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@map("product_images")
 }
@@ -95,7 +95,7 @@ model ProductVariation {
   variationId String
   createdAt   DateTime @default(now())
 
-  product   Product   @relation(fields: [productId], references: [id])
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
   variation Variation @relation(fields: [variationId], references: [id])
 
   @@unique([productId, variationId])
@@ -112,7 +112,7 @@ model ProductItem {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  product Product             @relation(fields: [productId], references: [id])
+  product Product             @relation(fields: [productId], references: [id], onDelete: Cascade)
   options ProductItemOption[]
 
   @@index([productId])
@@ -124,7 +124,7 @@ model ProductItemOption {
   itemId   String
   optionId String
 
-  item   ProductItem     @relation(fields: [itemId], references: [id])
+  item   ProductItem     @relation(fields: [itemId], references: [id], onDelete: Cascade)
   option VariationOption @relation(fields: [optionId], references: [id])
 
   @@unique([itemId, optionId])

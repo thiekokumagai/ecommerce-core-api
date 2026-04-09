@@ -176,4 +176,21 @@ export class ProductsController {
       await this.minioService.deleteFile(thumbUrl);
     }
   }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async delete(@Param('id') id: string) {
+    const imageUrls = await this.service.delete(id);
+
+    await Promise.all(
+      imageUrls.flatMap((url) => {
+        const thumbUrl = url.replace('.webp', '-thumb.webp');
+
+        return [
+          this.minioService.deleteFile(url),
+          this.minioService.deleteFile(thumbUrl),
+        ];
+      }),
+    );
+  }
 }

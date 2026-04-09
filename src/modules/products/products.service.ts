@@ -334,4 +334,21 @@ export class ProductsService {
   private generateHash(optionIds: string[]) {
     return createHash('sha256').update(optionIds.join('|')).digest('hex');
   }
+
+  async delete(id: string) {
+    const product = await this.prisma.product.findUnique({
+      where: { id },
+      include: { images: true },
+    });
+
+    if (!product) {
+      throw new NotFoundException('Produto não encontrado');
+    }
+    const imageUrls = product.images.map((img) => img.url);
+    await this.prisma.product.delete({
+      where: { id },
+    });
+
+    return imageUrls;
+  }
 }
