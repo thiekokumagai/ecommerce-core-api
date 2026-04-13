@@ -258,6 +258,10 @@ export class ProductsService {
           data: {
             productId,
             stock: item.stock,
+            sku: item.sku,
+            price: item.price,
+            promotionalPrice: item.promotionalPrice,
+            costPrice: item.costPrice,
             hash: this.generateHash(optionIds),
           },
         });

@@ -36,6 +36,18 @@ export class CreateProductItemInputDto {
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)
   price?: number;
+
+  @ApiPropertyOptional({ example: 39.9 })
+  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  promotionalPrice?: number;
+
+  @ApiPropertyOptional({ example: 25.0 })
+  @IsOptional()
+  @IsNumber({ maxDecimalPlaces: 2 })
+  @Min(0)
+  costPrice?: number;
 }
 
 export class CreateProductItemsDto {
