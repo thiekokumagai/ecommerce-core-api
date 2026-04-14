@@ -19,7 +19,7 @@ export class CreateProductItemInputDto {
   @ArrayMinSize(1)
   @ArrayUnique()
   @IsUUID('4', { each: true })
-  options: string[];
+  options?: string[];
 
   @ApiProperty({ example: 10 })
   @IsInt()

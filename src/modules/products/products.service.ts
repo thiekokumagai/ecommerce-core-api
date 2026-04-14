@@ -172,27 +172,51 @@ export class ProductsService {
       where: { id: productId, deletedAt: null },
       include: {
         variations: {
-          include: {
-            variation: {
-              include: {
-                options: true,
-              },
-            },
-          },
+          include: { variation: { include: { options: true } } },
         },
       },
     });
 
-    if (!product) {
-      throw new NotFoundException('Produto não encontrado');
+    if (!product) throw new NotFoundException('Produto não encontrado');
+
+    const isSimple = product.variations.length === 0;
+
+    // --- PRODUTO SIMPLES ---
+    if (isSimple) {
+      if (dto.items.length > 1)
+        throw new BadRequestException('Produto simples só pode ter um item');
+
+      const item = dto.items[0];
+
+      if ((item.options ?? []).length > 0)
+        throw new BadRequestException(
+          'Produto simples não aceita opções de variação',
+        );
+
+      const hash = `simple_${productId}`;
+
+      const existing = await this.prisma.productItem.findFirst({
+        where: { productId, hash },
+      });
+      if (existing)
+        throw new ConflictException('Item já cadastrado para este produto');
+
+      await this.prisma.productItem.create({
+        data: {
+          productId,
+          stock: item.stock,
+          sku: item.sku,
+          price: item.price,
+          promotionalPrice: item.promotionalPrice,
+          costPrice: item.costPrice,
+          hash,
+        },
+      });
+
+      return this.listItems(productId);
     }
 
-    if (product.variations.length === 0) {
-      throw new BadRequestException(
-        'O produto precisa ter variações vinculadas antes de criar itens',
-      );
-    }
-
+    // --- PRODUTO COM VARIAÇÕES (sem alteração) ---
     const allowedOptionsMap = new Map<string, string>();
     const variationIdsByOptionId = new Map<string, string>();
 
@@ -206,54 +230,51 @@ export class ProductsService {
     const hashes = new Set<string>();
 
     for (const item of dto.items) {
-      const optionIds = [...item.options].sort();
+      const optionIds = [...(item.options ?? [])].sort();
+
+      if (optionIds.length === 0)
+        throw new BadRequestException(
+          'Item com variação precisa ter ao menos uma opção',
+        );
+
       const hash = this.generateHash(optionIds);
 
-      if (hashes.has(hash)) {
+      if (hashes.has(hash))
         throw new ConflictException(
           'Não pode existir duplicação de combinação de item (SKU)',
         );
-      }
 
       hashes.add(hash);
 
       for (const optionId of optionIds) {
-        if (!allowedOptionsMap.has(optionId)) {
+        if (!allowedOptionsMap.has(optionId))
           throw new BadRequestException('Variação inválida para este produto');
-        }
       }
 
       const variationIds = optionIds.map((optionId) => {
         const variationId = variationIdsByOptionId.get(optionId);
-        if (!variationId) {
+        if (!variationId)
           throw new BadRequestException('Variação inválida para este produto');
-        }
         return variationId;
       });
-      const uniqueVariationIds = new Set(variationIds);
 
-      if (uniqueVariationIds.size !== optionIds.length) {
+      if (new Set(variationIds).size !== optionIds.length)
         throw new BadRequestException(
           'Cada item deve possuir no máximo uma opção por variação',
         );
-      }
     }
 
     const existingItems = await this.prisma.productItem.findMany({
-      where: {
-        productId,
-        hash: { in: [...hashes] },
-      },
+      where: { productId, hash: { in: [...hashes] } },
       select: { hash: true },
     });
 
-    if (existingItems.length > 0) {
+    if (existingItems.length > 0)
       throw new ConflictException('Item já existente para esta combinação');
-    }
 
     await this.prisma.$transaction(async (tx) => {
       for (const item of dto.items) {
-        const optionIds = [...item.options].sort();
+        const optionIds = [...(item.options ?? [])].sort();
         const createdItem = await tx.productItem.create({
           data: {
             productId,
