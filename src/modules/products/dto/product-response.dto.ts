@@ -61,15 +61,6 @@ class ProductItemDto {
   @ApiProperty({ required: false, nullable: true })
   sku?: string | null;
 
-  @ApiProperty({ required: false, nullable: true, example: '49.90' })
-  price?: string | null;
-
-  @ApiProperty({ required: false, nullable: true, example: '39.90' })
-  promotionalPrice?: string | null;
-
-  @ApiProperty({ required: false, nullable: true, example: '25.00' })
-  costPrice?: string | null;
-
   @ApiProperty()
   hash: string;
 
@@ -95,4 +86,13 @@ export class ProductResponseDto {
 
   @ApiProperty({ type: [ProductItemDto] })
   items: ProductItemDto[];
+
+  @ApiProperty({ required: false, nullable: true, example: '49.90' })
+  price?: string | null;
+
+  @ApiProperty({ required: false, nullable: true, example: '39.90' })
+  promotionalPrice?: string | null;
+
+  @ApiProperty({ required: false, nullable: true, example: '25.00' })
+  costPrice?: string | null;
 }

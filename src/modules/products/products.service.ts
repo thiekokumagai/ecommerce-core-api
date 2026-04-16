@@ -14,7 +14,7 @@ import { UpdateProductItemStockDto } from './dto/update-product-item-stock.dto';
 
 @Injectable()
 export class ProductsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(dto: CreateProductDto) {
     await this.ensureCategoryExists(dto.categoryId);
@@ -23,6 +23,9 @@ export class ProductsService {
       data: {
         title: dto.title.trim(),
         categoryId: dto.categoryId,
+        price: dto.price,
+        promotionalPrice: dto.promotionalPrice,
+        costPrice: dto.costPrice,
       },
     });
 
@@ -40,11 +43,11 @@ export class ProductsService {
         deletedAt: null,
         ...(query.search
           ? {
-              title: {
-                contains: query.search,
-                mode: 'insensitive',
-              },
-            }
+            title: {
+              contains: query.search,
+              mode: 'insensitive',
+            },
+          }
           : {}),
         ...(query.categoryId ? { categoryId: query.categoryId } : {}),
       },
@@ -206,9 +209,6 @@ export class ProductsService {
           productId,
           stock: item.stock,
           sku: item.sku,
-          price: item.price,
-          promotionalPrice: item.promotionalPrice,
-          costPrice: item.costPrice,
           hash,
         },
       });
@@ -280,9 +280,6 @@ export class ProductsService {
             productId,
             stock: item.stock,
             sku: item.sku,
-            price: item.price,
-            promotionalPrice: item.promotionalPrice,
-            costPrice: item.costPrice,
             hash: this.generateHash(optionIds),
           },
         });

@@ -74,7 +74,9 @@ model Product {
   images     ProductImage[]
   variations ProductVariation[]
   items      ProductItem[]
-
+  price            Decimal? @db.Decimal(10, 2)
+  promotionalPrice Decimal? @db.Decimal(10, 2)
+  costPrice        Decimal? @db.Decimal(10, 2)
   @@map("products")
 }
 
@@ -107,9 +109,7 @@ model ProductItem {
   productId        String
   stock            Int      @default(0)
   sku              String?
-  price            Decimal? @db.Decimal(10, 2)
-  promotionalPrice Decimal? @db.Decimal(10, 2)
-  costPrice        Decimal? @db.Decimal(10, 2)
+  
   hash             String   @unique
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
