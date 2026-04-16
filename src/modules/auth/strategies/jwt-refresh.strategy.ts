@@ -10,6 +10,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
   'jwt-refresh',
 ) {
   constructor() {
+    console.log('JWT_SECRET:', process.env);
     const secret = process.env.JWT_REFRESH_SECRET;
     if (!secret) {
       throw new Error('JWT_REFRESH_SECRET não definido');
