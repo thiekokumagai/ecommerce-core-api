@@ -23,6 +23,8 @@ export class ProductsService {
     const product = await this.prisma.product.create({
       data: {
         title: dto.title.trim(),
+        description: dto.description,
+        descriptionFormated: dto.descriptionFormated,
         categoryId: dto.categoryId,
         price: dto.price,
         promotionalPrice: dto.promotionalPrice,
@@ -44,6 +46,8 @@ export class ProductsService {
       where: { id },
       data: {
         title: dto.title?.trim(),
+        description: dto.description,
+        descriptionFormated: dto.descriptionFormated,
         categoryId: dto.categoryId,
         price: dto.price,
         promotionalPrice: dto.promotionalPrice,

@@ -28,4 +28,14 @@ export class CreateProductDto {
   @IsNumber({ maxDecimalPlaces: 2 })
   @Min(0)
   costPrice?: number;
+
+  @ApiPropertyOptional({ example: 'Descrição do produto' })
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @ApiPropertyOptional({ example: 'Descrição formatada do produto' })
+  @IsOptional()
+  @IsString()
+  descriptionFormated?: string;
 }

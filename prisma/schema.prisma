@@ -77,6 +77,8 @@ model Product {
   price            Decimal? @db.Decimal(10, 2)
   promotionalPrice Decimal? @db.Decimal(10, 2)
   costPrice        Decimal? @db.Decimal(10, 2)
+  description         String?   @db.Text
+  descriptionFormated String?   @db.Text
   @@map("products")
 }
 
