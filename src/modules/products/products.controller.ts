@@ -33,6 +33,7 @@ import { AttachProductVariationsDto } from './dto/attach-product-variations.dto'
 import { CreateProductItemsDto } from './dto/create-product-items.dto';
 import { UpdateProductItemStockDto } from './dto/update-product-item-stock.dto';
 import { UploadProductImagesDto } from './dto/upload-product-images.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UploadedFile as UploadedFileType } from '../../common/types/uploaded-file.type';
 
@@ -44,7 +45,7 @@ export class ProductsController {
   constructor(
     private service: ProductsService,
     private minioService: MinioService,
-  ) {}
+  ) { }
 
   @Get()
   @ApiOperation({ summary: 'Listar produtos' })
@@ -77,6 +78,17 @@ export class ProductsController {
   })
   create(@Body() dto: CreateProductDto) {
     return this.service.create(dto);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Atualizar produto' })
+  @ApiResponse({
+    status: 200,
+    description: 'Produto atualizado com sucesso',
+    type: ProductResponseDto,
+  })
+  update(@Param('id') id: string, @Body() dto: UpdateProductDto) {
+    return this.service.update(id, dto);
   }
 
   @Post(':id/variations')

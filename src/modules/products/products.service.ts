@@ -11,6 +11,7 @@ import { ListProductsDto } from './dto/list-products.dto';
 import { AttachProductVariationsDto } from './dto/attach-product-variations.dto';
 import { CreateProductItemsDto } from './dto/create-product-items.dto';
 import { UpdateProductItemStockDto } from './dto/update-product-item-stock.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -30,6 +31,27 @@ export class ProductsService {
     });
 
     return this.findOne(product.id);
+  }
+
+  async update(id: string, dto: UpdateProductDto) {
+    await this.findOne(id); // Garante que o produto existe
+
+    if (dto.categoryId) {
+      await this.ensureCategoryExists(dto.categoryId);
+    }
+
+    await this.prisma.product.update({
+      where: { id },
+      data: {
+        title: dto.title?.trim(),
+        categoryId: dto.categoryId,
+        price: dto.price,
+        promotionalPrice: dto.promotionalPrice,
+        costPrice: dto.costPrice,
+      },
+    });
+
+    return this.findOne(id);
   }
 
   async findAll(query: ListProductsDto) {
