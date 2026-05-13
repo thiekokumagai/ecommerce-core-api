@@ -128,3 +128,21 @@ Produto sem variação
 }
 ]
 }
+
+Exatamente. Quando um produto é simples (sem variações), ele possui apenas um registro na tabela product_items (para controlar o estoque global e o SKU), mas não insere nada na tabela product_item_options.
+
+A tabela product_item_options serve apenas para ligar um item de estoque a uma opção específica (como "Cor: Azul" ou "Tamanho: G"). Se não há opções, não há o que vincular.
+
+O que acontece na troca de tipo?
+Se você mudar um produto de "Com Variação" para "Simples" (ou vice-versa), o comportamento ideal na sua API deve ser:
+
+Excluir o existente: Deletar os product_items antigos do produto. Graças ao @onDelete(Cascade) no seu Prisma Schema, ao deletar um ProductItem, as entradas correspondentes em product_item_options são removidas automaticamente pelo banco de dados.
+Criar o novo: Inserir a nova estrutura (seja o item único "simple" ou os novos itens com variações).
+
+Resumo da Estrutura
+Produto Simples (Magna Spearmint):
+product_items: 1 registro (hash: "simple", stock: 10).
+product_item_options: 0 registros.
+Produto com Variação (Ignite V250):
+product_items: 2 registros (hash: "uuid-35mg", hash: "uuid-50mg").
+product_item_options: 2 registros (vinculando cada item à sua respectiva miligramagem).
