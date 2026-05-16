@@ -205,4 +205,36 @@ export class ProductsController {
       }),
     );
   }
+
+  @Delete(':id/variations')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Remover todas as variações do produto',
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Variações removidas com sucesso e o produto atualizado é retornado.',
+    type: ProductResponseDto,
+  })
+  async deleteVariation(@Param('id') id: string) {
+    return this.service.deleteVariation(id);
+  }
+
+  @Delete(':id/variation-options')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Remover uma opção específica de variação do produto',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Opção de variação removida com sucesso',
+    type: ProductResponseDto,
+  })
+  async deleteVariationOption(
+    @Param('id') id: string,
+    @Body() dto: { variationId: string; optionId: string },
+  ) {
+    return this.service.deleteVariationOption(id, dto);
+  }
 }

@@ -479,4 +479,87 @@ export class ProductsService {
 
     return imageUrls;
   }
+
+  async deleteVariation(productId: string) {
+  // Garante que o produto existe
+    await this.findOne(productId);
+
+    await this.prisma.$transaction(async (tx) => {
+      // Remove vínculos entre produto e variações
+      await tx.productVariation.deleteMany({
+        where: {
+          productId,
+        },
+      });
+
+      // Remove vínculos das opções dos itens
+      await tx.productItemOption.deleteMany({
+        where: {
+          item: {
+            productId,
+          },
+        },
+      });
+
+      // Remove todos os itens do produto
+      await tx.productItem.deleteMany({
+        where: {
+          productId,
+        },
+      });
+
+      // Cria novamente um item simples vazio
+      await tx.productItem.create({
+        data: {
+          productId,
+          stock: 0,
+          hash: `simple_${productId}`,
+          sku: null,
+        },
+      });
+    });
+
+    return this.findOne(productId);
+  }
+
+  async deleteVariationOption(
+    productId: string,
+    dto: { variationId: string; optionId: string },
+  ) {
+    await this.findOne(productId);
+
+    await this.prisma.$transaction(async (tx) => {
+      // 1. Remove a opção dos itens do produto
+      await tx.productItemOption.deleteMany({
+        where: {
+          optionId: dto.optionId,
+          item: {
+            productId,
+          },
+        },
+      });
+
+      // 2. Busca itens atualizados
+      const items = await tx.productItem.findMany({
+        where: { productId },
+        include: { options: true },
+      });
+
+      // 3. Remove itens sem opções
+      const itemsToDelete = items.filter(
+        (item) => item.options.length === 0,
+      );
+
+      if (itemsToDelete.length > 0) {
+        await tx.productItem.deleteMany({
+          where: {
+            id: { in: itemsToDelete.map((i) => i.id) },
+          },
+        });
+      }
+
+    });
+
+    return this.findOne(productId);
+  }
 }
