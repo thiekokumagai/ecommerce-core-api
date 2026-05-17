@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-05-17)
 
 **Core value:** Prover uma API de e-commerce robusta, segura, desacoplada e escalável, que garanta consistência no controle de estoque de produtos e performance sob alta demanda.
-**Current focus:** Phase 3: Refatoração de Apoio (users, variations)
+**Current focus:** Phase 4: Refatoração Principal (products, auth)
 
 ## Current Position
 
-Phase: 3 of 5 (Refatoração de Apoio)
-Plan: 1 of 2 in current phase (03-01)
+Phase: 4 of 5 (Refatoração Principal)
+Plan: 1 of 2 in current phase (04-01)
 Status: Ready to plan
-Last activity: 2026-05-17 — Refatoração do módulo pioneiro `categories` finalizada com 100% de sucesso e aplicação de injeção direta de classes abstratas no NestJS.
+Last activity: 2026-05-17 — Refatoração dos módulos de apoio `users` e `variations` concluída com sucesso (Onda 3 finalizada com 100% de compilação limpa).
 
-Progress: [████░░░░░░] 40%
+Progress: [██████░░░░] 60%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
+- Total plans completed: 4
 - Average duration: 15 min
-- Total execution time: 0.5 hours
+- Total execution time: 1.0 hours
 
 **By Phase:**
 

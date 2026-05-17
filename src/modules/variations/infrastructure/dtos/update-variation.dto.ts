@@ -9,6 +9,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+
 export class UpdateVariationDto {
   @ApiPropertyOptional({ example: 'Teor de Nicotina' })
   @IsOptional()
@@ -30,6 +31,7 @@ export class UpdateOrderItemDto {
   @IsInt()
   order: number;
 }
+
 export class UpdateOrderDto {
   @ApiProperty({
     type: [UpdateOrderItemDto],

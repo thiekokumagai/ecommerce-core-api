@@ -12,7 +12,7 @@ Este roadmap detalha as fases necessárias para refatorar o backend `ecommerce-c
 
 - [x] **Phase 1: Diretrizes Arquiteturais** - Estabelecer o manual da arquitetura limpa e inicializar o projeto
 - [x] **Phase 2: Refatoração do Módulo Pioneiro (categories)** - Validar o padrão desacoplando categorias
-- [ ] **Phase 3: Refatoração de Apoio (users, variations)** - Aplicar padrão aos módulos simples de suporte
+- [x] **Phase 3: Refatoração de Apoio (users, variations)** - Aplicar padrão aos módulos simples de suporte
 - [ ] **Phase 4: Refatoração Principal (products, auth)** - Migrar a lógica complexa de estoque e autenticação
 - [ ] **Phase 5: Verificação e Testes** - Garantir estabilidade com suite de testes unitários e E2E completa
 
@@ -55,8 +55,8 @@ Plans:
 **Plans**: 2 planos
 
 Plans:
-- [ ] 03-01: Refatorar módulo de usuários (users)
-- [ ] 03-02: Refatorar módulo de variações (variations)
+- [x] 03-01: Refatorar módulo de usuários (users)
+- [x] 03-02: Refatorar módulo de variações (variations)
 
 ### Phase 4: Refatoração Principal (products, auth)
 **Goal**: Refatorar o core complexo de catálogo, regras de estoque e fluxo de segurança
@@ -91,6 +91,6 @@ Plans:
 |-------|-----------|----------------|--------|-----------|
 | 1. Diretrizes Arquiteturais | v1.0 | 1/1 | Completed | 2026-05-17 |
 | 2. Módulo Pioneiro (categories) | v1.0 | 1/1 | Completed | 2026-05-17 |
-| 3. Módulos Apoio (users, variations) | v1.0 | 0/2 | Not started | - |
+| 3. Módulos Apoio (users, variations) | v1.0 | 2/2 | Completed | 2026-05-17 |
 | 4. Módulos Core (products, auth) | v1.0 | 0/2 | Not started | - |
 | 5. Verificação e Testes | v1.0 | 0/1 | Not started | - |
