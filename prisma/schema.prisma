@@ -135,3 +135,42 @@ model ProductItemOption {
   @@unique([itemId, optionId])
   @@map("product_item_options")
 }
+
+model StoreSettings {
+  id                      String   @id @default(uuid())
+  storeName               String   @default("Minha Loja")
+  logoUrl                 String?
+  faviconUrl              String?
+  topHeaderText           String?
+  bannerUrls              String[]
+  phone                   String   @default("")
+  instagram               String?
+  
+  // Endereço
+  cep                     String   @default("")
+  street                  String   @default("")
+  number                  String   @default("")
+  neighborhood            String   @default("")
+  city                    String   @default("")
+  state                   String   @default("")
+  complement              String?
+  hideAddress             Boolean  @default(false)
+  
+  // Pagamentos
+  pixEnabled              Boolean  @default(false)
+  pixKeyType              String?  
+  pixKey                  String?
+  pixHolder               String?
+  
+  payOnDeliveryCash       Boolean  @default(false)
+  payOnDeliveryCardDebit  Boolean  @default(false)
+  payOnDeliveryCardCredit Boolean  @default(false)
+  
+  // Descontos/Taxas adicionais salvos como JSON para flexibilidade
+  paymentRules            Json?    
+  
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  @@map("store_settings")
+}

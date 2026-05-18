@@ -62,6 +62,8 @@ Progress: [██████░░░░] 60%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
+- [Phase 6]: Adição do módulo de Configurações (StoreSettings) para persistência de dados de identidade, endereço, pagamentos e taxas.
+
 - [Phase 1]: Escolha por Clean Architecture Modular agrupada por recurso/feature.
 
 ### Pending Todos

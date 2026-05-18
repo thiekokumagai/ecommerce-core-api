@@ -7,6 +7,7 @@ import { UsersModule } from './modules/users/users.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { VariationsModule } from './modules/variations/variations.module';
 import { ProductsModule } from './modules/products/products.module';
+import { SettingsModule } from './modules/settings/settings.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { ProductsModule } from './modules/products/products.module';
     CategoriesModule,
     VariationsModule,
     ProductsModule,
+    SettingsModule,
   ],
 })
 export class AppModule {}
