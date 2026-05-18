@@ -3,28 +3,28 @@ import { StoreSettings } from '../entities/store-settings.entity';
 import { ISettingsRepository } from '../repositories/isettings.repository';
 
 export interface UpdateSettingsInput {
-  storeName: string;
+  storeName?: string;
   logoUrl?: string | null;
   faviconUrl?: string | null;
   topHeaderText?: string | null;
   bannerUrls?: string[];
-  phone: string;
+  phone?: string;
   instagram?: string | null;
-  cep: string;
-  street: string;
-  number: string;
-  neighborhood: string;
-  city: string;
-  state: string;
+  cep?: string;
+  street?: string;
+  number?: string;
+  neighborhood?: string;
+  city?: string;
+  state?: string;
   complement?: string | null;
-  hideAddress: boolean;
-  pixEnabled: boolean;
+  hideAddress?: boolean;
+  pixEnabled?: boolean;
   pixKeyType?: string | null;
   pixKey?: string | null;
   pixHolder?: string | null;
-  payOnDeliveryCash: boolean;
-  payOnDeliveryCardDebit: boolean;
-  payOnDeliveryCardCredit: boolean;
+  payOnDeliveryCash?: boolean;
+  payOnDeliveryCardDebit?: boolean;
+  payOnDeliveryCardCredit?: boolean;
   paymentRules?: any;
 }
 
@@ -33,30 +33,58 @@ export class UpdateSettingsUseCase {
   constructor(private readonly settingsRepository: ISettingsRepository) {}
 
   async execute(input: UpdateSettingsInput): Promise<StoreSettings> {
+    const existing = await this.settingsRepository.get();
+
+    const base = existing || {
+      storeName: 'Minha Loja',
+      logoUrl: null,
+      faviconUrl: null,
+      topHeaderText: null,
+      bannerUrls: [],
+      phone: '',
+      instagram: null,
+      cep: '',
+      street: '',
+      number: '',
+      neighborhood: '',
+      city: '',
+      state: '',
+      complement: null,
+      hideAddress: false,
+      pixEnabled: false,
+      pixKeyType: null,
+      pixKey: null,
+      pixHolder: null,
+      payOnDeliveryCash: false,
+      payOnDeliveryCardDebit: false,
+      payOnDeliveryCardCredit: false,
+      paymentRules: [],
+    };
+
     return this.settingsRepository.save({
-      storeName: input.storeName,
-      logoUrl: input.logoUrl ?? null,
-      faviconUrl: input.faviconUrl ?? null,
-      topHeaderText: input.topHeaderText ?? null,
-      bannerUrls: input.bannerUrls ?? [],
-      phone: input.phone,
-      instagram: input.instagram ?? null,
-      cep: input.cep,
-      street: input.street,
-      number: input.number,
-      neighborhood: input.neighborhood,
-      city: input.city,
-      state: input.state,
-      complement: input.complement ?? null,
-      hideAddress: input.hideAddress,
-      pixEnabled: input.pixEnabled,
-      pixKeyType: input.pixKeyType ?? null,
-      pixKey: input.pixKey ?? null,
-      pixHolder: input.pixHolder ?? null,
-      payOnDeliveryCash: input.payOnDeliveryCash,
-      payOnDeliveryCardDebit: input.payOnDeliveryCardDebit,
-      payOnDeliveryCardCredit: input.payOnDeliveryCardCredit,
-      paymentRules: input.paymentRules ?? [],
+      storeName: input.storeName !== undefined ? input.storeName : base.storeName,
+      logoUrl: input.logoUrl !== undefined ? input.logoUrl : base.logoUrl,
+      faviconUrl: input.faviconUrl !== undefined ? input.faviconUrl : base.faviconUrl,
+      topHeaderText: input.topHeaderText !== undefined ? input.topHeaderText : base.topHeaderText,
+      bannerUrls: input.bannerUrls !== undefined ? input.bannerUrls : base.bannerUrls,
+      phone: input.phone !== undefined ? input.phone : base.phone,
+      instagram: input.instagram !== undefined ? input.instagram : base.instagram,
+      cep: input.cep !== undefined ? input.cep : base.cep,
+      street: input.street !== undefined ? input.street : base.street,
+      number: input.number !== undefined ? input.number : base.number,
+      neighborhood: input.neighborhood !== undefined ? input.neighborhood : base.neighborhood,
+      city: input.city !== undefined ? input.city : base.city,
+      state: input.state !== undefined ? input.state : base.state,
+      complement: input.complement !== undefined ? input.complement : base.complement,
+      hideAddress: input.hideAddress !== undefined ? input.hideAddress : base.hideAddress,
+      pixEnabled: input.pixEnabled !== undefined ? input.pixEnabled : base.pixEnabled,
+      pixKeyType: input.pixKeyType !== undefined ? input.pixKeyType : base.pixKeyType,
+      pixKey: input.pixKey !== undefined ? input.pixKey : base.pixKey,
+      pixHolder: input.pixHolder !== undefined ? input.pixHolder : base.pixHolder,
+      payOnDeliveryCash: input.payOnDeliveryCash !== undefined ? input.payOnDeliveryCash : base.payOnDeliveryCash,
+      payOnDeliveryCardDebit: input.payOnDeliveryCardDebit !== undefined ? input.payOnDeliveryCardDebit : base.payOnDeliveryCardDebit,
+      payOnDeliveryCardCredit: input.payOnDeliveryCardCredit !== undefined ? input.payOnDeliveryCardCredit : base.payOnDeliveryCardCredit,
+      paymentRules: input.paymentRules !== undefined ? input.paymentRules : base.paymentRules,
     });
   }
 }

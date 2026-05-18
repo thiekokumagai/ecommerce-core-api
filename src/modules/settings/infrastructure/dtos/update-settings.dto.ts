@@ -1,11 +1,11 @@
-import { IsString, IsNotEmpty, IsOptional, IsBoolean, IsArray } from 'class-validator';
+import { IsString, IsOptional, IsBoolean, IsArray } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateSettingsDto {
-  @ApiProperty({ example: 'Pode Mais' })
+  @ApiProperty({ example: 'Pode Mais', required: false })
   @IsString()
-  @IsNotEmpty()
-  storeName: string;
+  @IsOptional()
+  storeName?: string;
 
   @ApiProperty({ example: 'https://cdn.example.com/logo.png', required: false })
   @IsString()
@@ -28,10 +28,10 @@ export class UpdateSettingsDto {
   @IsOptional()
   bannerUrls?: string[];
 
-  @ApiProperty({ example: '(67) 99999-9999' })
+  @ApiProperty({ example: '(67) 99999-9999', required: false })
   @IsString()
-  @IsNotEmpty()
-  phone: string;
+  @IsOptional()
+  phone?: string;
 
   @ApiProperty({ example: '@podemais.cg', required: false })
   @IsString()
@@ -39,49 +39,51 @@ export class UpdateSettingsDto {
   instagram?: string | null;
 
   // Endereço
-  @ApiProperty({ example: '79002-075' })
+  @ApiProperty({ example: '79002-075', required: false })
   @IsString()
-  @IsNotEmpty()
-  cep: string;
+  @IsOptional()
+  cep?: string;
 
-  @ApiProperty({ example: 'Rua 14 de Julho' })
+  @ApiProperty({ example: 'Rua 14 de Julho', required: false })
   @IsString()
-  @IsNotEmpty()
-  street: string;
+  @IsOptional()
+  street?: string;
 
-  @ApiProperty({ example: '1234' })
+  @ApiProperty({ example: '1234', required: false })
   @IsString()
-  @IsNotEmpty()
-  number: string;
+  @IsOptional()
+  number?: string;
 
-  @ApiProperty({ example: 'Centro' })
+  @ApiProperty({ example: 'Centro', required: false })
   @IsString()
-  @IsNotEmpty()
-  neighborhood: string;
+  @IsOptional()
+  neighborhood?: string;
 
-  @ApiProperty({ example: 'Campo Grande' })
+  @ApiProperty({ example: 'Campo Grande', required: false })
   @IsString()
-  @IsNotEmpty()
-  city: string;
+  @IsOptional()
+  city?: string;
 
-  @ApiProperty({ example: 'MS' })
+  @ApiProperty({ example: 'MS', required: false })
   @IsString()
-  @IsNotEmpty()
-  state: string;
+  @IsOptional()
+  state?: string;
 
   @ApiProperty({ example: 'Sala 3', required: false })
   @IsString()
   @IsOptional()
   complement?: string | null;
 
-  @ApiProperty({ example: false })
+  @ApiProperty({ example: false, required: false })
   @IsBoolean()
-  hideAddress: boolean;
+  @IsOptional()
+  hideAddress?: boolean;
 
   // Pagamentos
-  @ApiProperty({ example: true })
+  @ApiProperty({ example: true, required: false })
   @IsBoolean()
-  pixEnabled: boolean;
+  @IsOptional()
+  pixEnabled?: boolean;
 
   @ApiProperty({ example: 'EMAIL', required: false })
   @IsString()
@@ -98,17 +100,20 @@ export class UpdateSettingsDto {
   @IsOptional()
   pixHolder?: string | null;
 
-  @ApiProperty({ example: true })
+  @ApiProperty({ example: true, required: false })
   @IsBoolean()
-  payOnDeliveryCash: boolean;
+  @IsOptional()
+  payOnDeliveryCash?: boolean;
 
-  @ApiProperty({ example: true })
+  @ApiProperty({ example: true, required: false })
   @IsBoolean()
-  payOnDeliveryCardDebit: boolean;
+  @IsOptional()
+  payOnDeliveryCardDebit?: boolean;
 
-  @ApiProperty({ example: true })
+  @ApiProperty({ example: true, required: false })
   @IsBoolean()
-  payOnDeliveryCardCredit: boolean;
+  @IsOptional()
+  payOnDeliveryCardCredit?: boolean;
 
   @ApiProperty({ example: [], required: false })
   @IsOptional()
