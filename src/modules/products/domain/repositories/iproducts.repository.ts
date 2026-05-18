@@ -89,4 +89,6 @@ export abstract class IProductsRepository {
     productId: string,
     optionId: string,
   ): Promise<void>;
+
+  abstract duplicate(id: string): Promise<ProductWithDetails>;
 }

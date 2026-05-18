@@ -49,6 +49,7 @@ import { ManageProductImagesUseCase } from '../../domain/use-cases/manage-produc
 import { DeleteProductUseCase } from '../../domain/use-cases/delete-product.use-case';
 import { DeleteProductVariationUseCase } from '../../domain/use-cases/delete-product-variation.use-case';
 import { DeleteProductVariationOptionUseCase } from '../../domain/use-cases/delete-product-variation-option.use-case';
+import { DuplicateProductUseCase } from '../../domain/use-cases/duplicate-product.use-case';
 
 @ApiTags('Products')
 @ApiBearerAuth('access-token')
@@ -68,6 +69,7 @@ export class ProductsController {
     private readonly deleteProductUseCase: DeleteProductUseCase,
     private readonly deleteProductVariationUseCase: DeleteProductVariationUseCase,
     private readonly deleteProductVariationOptionUseCase: DeleteProductVariationOptionUseCase,
+    private readonly duplicateProductUseCase: DuplicateProductUseCase,
     private readonly minioService: MinioService,
   ) {}
 
@@ -198,7 +200,11 @@ export class ProductsController {
 
     return this.manageProductImagesUseCase.addImages(id, urls);
   }
-
+  @Post(':id/duplicate')
+  @ApiOperation({ summary: 'Duplicar produto completo com estoque zerado' })
+  duplicate(@Param('id') id: string) {
+    return this.duplicateProductUseCase.execute(id);
+  }
   @Delete(':id/images/:imageId')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Remover imagem do produto' })

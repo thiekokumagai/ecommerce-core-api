@@ -16,6 +16,7 @@ import { ManageProductImagesUseCase } from './domain/use-cases/manage-product-im
 import { DeleteProductUseCase } from './domain/use-cases/delete-product.use-case';
 import { DeleteProductVariationUseCase } from './domain/use-cases/delete-product-variation.use-case';
 import { DeleteProductVariationOptionUseCase } from './domain/use-cases/delete-product-variation-option.use-case';
+import { DuplicateProductUseCase } from './domain/use-cases/duplicate-product.use-case';
 
 @Module({
   imports: [MinioModule],
@@ -33,6 +34,7 @@ import { DeleteProductVariationOptionUseCase } from './domain/use-cases/delete-p
     DeleteProductUseCase,
     DeleteProductVariationUseCase,
     DeleteProductVariationOptionUseCase,
+    DuplicateProductUseCase,
     {
       provide: IProductsRepository,
       useClass: PrismaProductsRepository,
